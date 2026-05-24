@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin Dashboard | Ashoka Water Park & Resort</title>
+  <meta name="description" content="Admin Dashboard for Ashoka Water Park & Resort. Manage inquiries, testimonials, gallery and settings.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+
+  <style>
+    /* Page-specific admin overrides */
+    body { background: var(--gray-50); }
+
+    /* Login logo sizing */
+    .admin-login-logo {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--glass-bg);
+      border: 2px solid var(--glass-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      overflow: hidden;
+      background: var(--gradient-ocean);
+    }
+
+    .admin-login-logo .nav-logo-placeholder {
+      font-size: 0.65rem;
+      font-weight: 800;
+      color: var(--aqua-cyan);
+      font-family: var(--font-heading);
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    /* Full-width button utility */
+    .btn-full { width: 100%; }
+
+    /* Demo credentials text */
+    .demo-text {
+      font-size: 0.78rem;
+      color: var(--gray-400);
+      margin-top: 20px;
+    }
+
+    /* Admin stat icon */
+    .admin-stat-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+      font-size: 1.2rem;
+    }
+
+    .admin-stat-icon.icon-blue {
+      background: rgba(0, 210, 255, 0.1);
+      color: var(--ocean-blue);
+    }
+
+    .admin-stat-icon.icon-green {
+      background: rgba(27, 122, 82, 0.1);
+      color: var(--palm-green);
+    }
+
+    .admin-stat-icon.icon-orange {
+      background: rgba(255, 122, 69, 0.1);
+      color: var(--sunset-orange);
+    }
+
+    .admin-stat-icon.icon-cyan {
+      background: rgba(0, 210, 255, 0.1);
+      color: var(--aqua-cyan);
+    }
+
+    /* Panel visibility */
+    .admin-panel { display: block; }
+    .admin-panel.hidden { display: none; }
+
+    /* Admin action buttons */
+    .admin-action-btn {
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--gray-200);
+      background: var(--white);
+      font-size: 0.78rem;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: var(--font-body);
+      color: var(--gray-600);
+      transition: all var(--transition-fast);
+    }
+
+    .admin-action-btn:hover {
+      border-color: var(--ocean-blue);
+      color: var(--ocean-blue);
+    }
+
+    .admin-action-btn.btn-danger {
+      color: #ef4444;
+      border-color: #fecaca;
+    }
+
+    .admin-action-btn.btn-danger:hover {
+      background: #ef4444;
+      color: var(--white);
+      border-color: #ef4444;
+    }
+
+    .admin-action-btn.btn-approve {
+      color: var(--palm-green);
+      border-color: #bbf7d0;
+    }
+
+    .admin-action-btn.btn-approve:hover {
+      background: var(--palm-green);
+      color: var(--white);
+      border-color: var(--palm-green);
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--gray-400);
+      font-size: 0.92rem;
+    }
+
+    .empty-state i {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+      display: block;
+      color: var(--gray-300);
+    }
+
+    /* Admin sidebar logout styling */
+    .admin-nav-item.nav-logout {
+      margin-top: auto;
+      color: rgba(255,255,255,0.4);
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .admin-nav-item.nav-logout:hover {
+      color: #ef4444;
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    /* Sidebar nav container */
+    .admin-sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      height: calc(100% - 100px);
+    }
+
+    /* Responsive admin mobile nav */
+    @media (max-width: 1024px) {
+      .admin-mobile-nav {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 16px 24px;
+        background: var(--ocean-deep);
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+
+      .admin-mobile-nav::-webkit-scrollbar { display: none; }
+
+      .admin-mobile-nav-btn {
+        flex-shrink: 0;
+        padding: 8px 18px;
+        border-radius: var(--radius-full);
+        border: 1px solid rgba(255,255,255,0.15);
+        background: transparent;
+        color: rgba(255,255,255,0.7);
+        font-size: 0.82rem;
+        font-weight: 500;
+        cursor: pointer;
+        font-family: var(--font-body);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: all var(--transition-fast);
+        white-space: nowrap;
+      }
+
+      .admin-mobile-nav-btn.active,
+      .admin-mobile-nav-btn:hover {
+        background: rgba(255,255,255,0.1);
+        color: var(--white);
+        border-color: var(--aqua-cyan);
+      }
+    }
+
+    @media (min-width: 1025px) {
+      .admin-mobile-nav { display: none; }
+    }
+
+    /* Settings form section */
+    .settings-section {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      padding: 32px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--gray-100);
+    }
+
+    .settings-section h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    /* Gallery panel spacing */
+    .gallery-panel-grid {
+      margin-top: 24px;
+    }
+
+    /* Table action buttons group */
+    .action-group {
+      display: flex;
+      gap: 6px;
+    }
+
+    /* Admin table responsive */
+    .admin-table-wrap {
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       STATE 1 — LOGIN SCREEN (shown by default)
+       ============================================================ -->
+  <div id="admin-login" class="admin-login">
+    <div class="admin-login-card">
+
+      <!-- Logo -->
+      <div class="admin-login-logo" style="background: transparent; border: none; border-radius: 0; width: 80px; height: auto;">
+        <img src="assets/logo.png" alt="Ashoka Water Park & Resort Logo" style="width: 100%; height: auto;">
+      </div>
+
+      <h2>Admin Dashboard</h2>
+      <p>Sign in to manage your resort</p>
+
+      <form id="admin-login-form">
+        <div class="form-group">
+          <label for="admin-email">Email Address</label>
+          <input type="email" id="admin-email" class="form-control" placeholder="Enter your email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="admin-password">Password</label>
+          <input type="password" id="admin-password" class="form-control" placeholder="Enter your password" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full">
+          <i data-lucide="log-in"></i>
+          Sign In
+        </button>
+
+        <p class="demo-text">Demo: admin@ashoka.com / admin123</p>
+      </form>
+
+    </div>
+  </div>
+
+
+  <!-- ============================================================
+       STATE 2 — DASHBOARD (hidden by default)
+       ============================================================ -->
+  <div id="admin-dashboard" class="admin-dashboard" style="display: none;">
+
+    <!-- ==================== SIDEBAR ==================== -->
+    <aside class="admin-sidebar">
+      <div class="admin-sidebar-brand">
+        <h3>Ashoka Resort</h3>
+        <span>Admin Panel</span>
+      </div>
+
+      <nav class="admin-sidebar-nav">
+        <button class="admin-nav-item active" data-panel="panel-dashboard">
+          <i data-lucide="layout-dashboard"></i>
+          Dashboard
+        </button>
+        <button class="admin-nav-item" data-panel="panel-inquiries">
+          <i data-lucide="inbox"></i>
+          Inquiries
+        </button>
+        <button class="admin-nav-item" data-panel="panel-testimonials">
+          <i data-lucide="message-square"></i>
+          Testimonials
+        </button>
+        <button class="admin-nav-item" data-panel="panel-gallery">
+          <i data-lucide="image"></i>
+          Gallery
+        </button>
+        <button class="admin-nav-item" data-panel="panel-settings">
+          <i data-lucide="settings"></i>
+          Settings
+        </button>
+        <button class="admin-nav-item nav-logout" id="admin-logout">
+          <i data-lucide="log-out"></i>
+          Logout
+        </button>
+      </nav>
+    </aside>
+
+    <!-- ==================== MOBILE NAV ==================== -->
+    <div class="admin-mobile-nav">
+      <button class="admin-mobile-nav-btn active" data-panel="panel-dashboard">
+        <i data-lucide="layout-dashboard"></i> Dashboard
+      </button>
+      <button class="admin-mobile-nav-btn" data-panel="panel-inquiries">
+        <i data-lucide="inbox"></i> Inquiries
+      </button>
+      <button class="admin-mobile-nav-btn" data-panel="panel-testimonials">
+        <i data-lucide="message-square"></i> Testimonials
+      </button>
+      <button class="admin-mobile-nav-btn" data-panel="panel-gallery">
+        <i data-lucide="image"></i> Gallery
+      </button>
+      <button class="admin-mobile-nav-btn" data-panel="panel-settings">
+        <i data-lucide="settings"></i> Settings
+      </button>
+      <button class="admin-mobile-nav-btn" id="admin-logout-mobile">
+        <i data-lucide="log-out"></i> Logout
+      </button>
+    </div>
+
+    <!-- ==================== MAIN CONTENT ==================== -->
+    <main class="admin-main">
+
+      <!-- Admin Header -->
+      <div class="admin-header">
+        <h1>Dashboard Overview</h1>
+        <button class="btn btn-ocean btn-sm" id="btn-refresh-data">
+          <i data-lucide="refresh-cw"></i>
+          Refresh Data
+        </button>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="admin-stats-grid">
+
+        <div class="admin-stat-card" id="stat-inquiries">
+          <div class="admin-stat-icon icon-blue">
+            <i data-lucide="inbox"></i>
+          </div>
+          <h4>Total Inquiries</h4>
+          <div class="stat-value">0</div>
+        </div>
+
+        <div class="admin-stat-card" id="stat-monthly">
+          <div class="admin-stat-icon icon-green">
+            <i data-lucide="calendar"></i>
+          </div>
+          <h4>This Month</h4>
+          <div class="stat-value">0</div>
+        </div>
+
+        <div class="admin-stat-card" id="stat-reviews">
+          <div class="admin-stat-icon icon-orange">
+            <i data-lucide="star"></i>
+          </div>
+          <h4>Pending Reviews</h4>
+          <div class="stat-value">0</div>
+        </div>
+
+        <div class="admin-stat-card" id="stat-gallery">
+          <div class="admin-stat-icon icon-cyan">
+            <i data-lucide="image"></i>
+          </div>
+          <h4>Gallery Items</h4>
+          <div class="stat-value">0</div>
+        </div>
+
+      </div>
+
+
+      <!-- ========== PANEL 1 — INQUIRIES ========== -->
+      <div id="panel-inquiries" class="admin-panel">
+        <div class="admin-table-card">
+          <div class="admin-table-header">
+            <h3>Recent Inquiries</h3>
+            <button class="admin-action-btn">
+              <i data-lucide="download"></i> Export
+            </button>
+          </div>
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Phone</th>
+                  <th>Type</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="inquiries-table-body">
+                <!-- Populated dynamically by JS -->
+              </tbody>
+            </table>
+          </div>
+          <div class="empty-state" id="inquiries-empty">
+            <i data-lucide="inbox"></i>
+            <p>No inquiries yet</p>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ========== PANEL 2 — TESTIMONIALS ========== -->
+      <div id="panel-testimonials" class="admin-panel hidden">
+        <div class="admin-table-card">
+          <div class="admin-table-header">
+            <h3>Customer Testimonials</h3>
+            <button class="btn btn-primary btn-sm" id="btn-add-testimonial">
+              <i data-lucide="plus"></i>
+              Add Testimonial
+            </button>
+          </div>
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Rating</th>
+                  <th>Review</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="testimonials-table-body">
+                <!-- Populated dynamically by JS -->
+              </tbody>
+            </table>
+          </div>
+          <div class="empty-state" id="testimonials-empty">
+            <i data-lucide="message-square"></i>
+            <p>No testimonials yet. Click "Add Testimonial" to get started.</p>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ========== PANEL 3 — GALLERY ========== -->
+      <div id="panel-gallery" class="admin-panel hidden">
+
+        <!-- Upload Zone -->
+        <div class="upload-zone" id="gallery-upload-zone">
+          <i data-lucide="upload"></i>
+          <p>Drag & drop images or click to upload</p>
+          <input type="file" id="gallery-file-input" accept="image/*" multiple hidden>
+        </div>
+
+        <!-- Gallery Grid -->
+        <div class="admin-gallery-grid gallery-panel-grid" id="admin-gallery-grid">
+          <!-- Populated dynamically by JS -->
+        </div>
+
+        <div class="empty-state" id="gallery-empty">
+          <i data-lucide="image"></i>
+          <p>No gallery items yet. Upload images to get started.</p>
+        </div>
+
+      </div>
+
+
+      <!-- ========== PANEL 4 — SETTINGS ========== -->
+      <div id="panel-settings" class="admin-panel hidden">
+        <div class="settings-section">
+          <h3>Resort Settings</h3>
+          <form id="settings-form">
+
+            <div class="form-group">
+              <label for="setting-resort-name">Resort Name</label>
+              <input type="text" id="setting-resort-name" class="form-control" placeholder="Ashoka Water Park & Resort" value="Ashoka Water Park & Resort">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="setting-phone">Phone Number</label>
+                <input type="tel" id="setting-phone" class="form-control" placeholder="+91 96199 00019" value="+91 96199 00019">
+              </div>
+              <div class="form-group">
+                <label for="setting-email">Email Address</label>
+                <input type="email" id="setting-email" class="form-control" placeholder="info@ashokaresort.com" value="info@ashokaresort.com">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="setting-whatsapp">WhatsApp Number</label>
+                <input type="tel" id="setting-whatsapp" class="form-control" placeholder="+91 96199 00019" value="+91 96199 00019">
+              </div>
+              <div class="form-group">
+                <label for="setting-address">Address</label>
+                <input type="text" id="setting-address" class="form-control" placeholder="Resort address" value="Ashoka Water Park & Resort, Maharashtra, India">
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+              <i data-lucide="save"></i>
+              Save Settings
+            </button>
+
+          </form>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+
+  <!-- ============================================================
+       MODAL — Add Testimonial
+       ============================================================ -->
+  <div class="modal-overlay" id="testimonial-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Add Testimonial</h3>
+        <button class="modal-close" id="modal-close-testimonial">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="testimonial-form">
+
+          <div class="form-group">
+            <label for="testimonial-name">Customer Name</label>
+            <input type="text" id="testimonial-name" class="form-control" placeholder="Enter customer name" required>
+          </div>
+
+          <div class="form-group">
+            <label for="testimonial-rating">Rating</label>
+            <select id="testimonial-rating" class="form-control" required>
+              <option value="" disabled selected>Select a rating</option>
+              <option value="5">⭐⭐⭐⭐⭐ — 5 Stars (Excellent)</option>
+              <option value="4">⭐⭐⭐⭐ — 4 Stars (Great)</option>
+              <option value="3">⭐⭐⭐ — 3 Stars (Good)</option>
+              <option value="2">⭐⭐ — 2 Stars (Fair)</option>
+              <option value="1">⭐ — 1 Star (Poor)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="testimonial-review">Review</label>
+            <textarea id="testimonial-review" class="form-control" rows="4" placeholder="Enter the customer's review..." required></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-full">
+            <i data-lucide="plus-circle"></i>
+            Add Testimonial
+          </button>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ============================================================
+       TOAST NOTIFICATION
+       ============================================================ -->
+  <div class="toast" id="admin-toast">
+    <span id="admin-toast-message">Action completed successfully.</span>
+  </div>
+
+
+  <!-- ============================================================
+       SCRIPTS
+       ============================================================ -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>lucide.createIcons();</script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/main.js"></script>
+
+</body>
+</html>
